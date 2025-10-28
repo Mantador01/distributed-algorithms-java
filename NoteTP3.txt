@@ -1,0 +1,14 @@
+2.2:
+Non, en mode synchrone pur tout les msg mettent exactement 1 tick pour arriver, sans perte etc.
+Comme on envoie un HB tous les 10 ticks et qu'on suspecte un pair qu'apres 20 ticks sans l'avoir entendu, même dans le pire des cas le dernier
+msg pars au tick 10 et arrive au tick 11, donc on a aumoins 9 tick entre l'arrivé du dernier HB et notre fenetre de suspicion,
+
+DONC tant que le noeuf dest n'est pas reelement en panne, on recevra tjr aumoins un HB dans chaque periode de 20 ticks donc pas de fausse suspicion due a un delai de livraison.
+
+2.3
+On observe une oscillations de confiance, parfois un noeud disparait du trusted d'un pair, puis des qu'un HB retardé arrive il est réintégré.
+Donc des fausses suspicions ont lieu, un noeud encore vivant est momentannément suspecté puis réhabilité quand son msg fini par arrivé, c'est le comportement de base de HB en présence de latence variable, 
+sans pertes de message, mais avec des délais aléatoires jusqu’à 5 ticks, on ne peut plus distinguer retard et panne, d’où ces retraits/réintégrations successifs.
+
+
+

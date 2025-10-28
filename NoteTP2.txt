@@ -1,0 +1,103 @@
+Topologie en anneau unidirectionnel
+Chaque nœud ne communique qu’avec son unique successeur (direction “sens des aiguilles d’une montre”), et reçoit uniquement du nœud qui le précède.
+
+Identifiants de nœuds uniques et totalement ordonnés
+– Chaque processus possède un ID distinct, comparable (on peut dire “plus grand que”, “plus petit que”).
+– Les ID sont compris dans un même domaine (ici 0… N–1) et connus uniquement de leur propre processus.
+
+Canaux fiables et FIFO
+– Aucun message n’est perdu, altéré ou dupliqué.
+– Les messages transmis entre deux mêmes voisins arrivent dans l’ordre où ils ont été envoyés.
+
+Pas de pannes de processus ni de liens
+On assume que ni les nœuds ni les liens ne tombent en panne pendant l’exécution de l’élection.
+
+Asynchronisme partiel
+– Le système n’est pas nécessairement synchronisé globalement (pas d’horloge commune), mais on suppose que chaque message finit par arriver (délai borné ou non-borné).
+– Les délais de transmission peuvent varier, mais n’empêchent pas la terminaison.
+
+Tous les nœuds sont initialement candidats
+Chacun considère son propre ID comme “leader courant” et envoie aussitôt un message de candidature, garantissant que l’ID maximal finira par circuler seul dans l’anneau.
+
+Connaissance locale uniquement
+Aucun processus n’a de vue globale : il ne connaît ni la taille de l’anneau, ni les ID des autres, sauf à travers les messages qu’il échange.
+
+
+
+
+
+
+
+Hypothèses
+• Chaque nœud a un identifiant unique et sait que les identifiants sont
+uniques
+• Chaque nœud connaît son voisin
+• Le nombre de nœuds dans le système est inconnu de chaque nœud
+
+Idées
+• Au départ, certains nœuds sont candidat à l’élection
+• Et donc propage sa candidature via son ID
+• Un nœud qui reçoit un ID supérieur au sien ne sera pas élu
+• Et retransmet l’ID reçue à son voisin
+• Le nœud, avec l’ID maximal, reçoit son propre ID et est élu
+
+Variables locales
+• Etat : non candidat / candidat / élu / perdu # initialisé à non candidat
+• Leader : ID du leader ; initialisé à NULL
+• Succ : successeur du nœud dans l’anneau
+
+
+
+
+
+
+
+=== Statistiques sur 100 exécutions ===
+Moyenne = 1965.37
+Minimum = 36
+Maximum = 3917
+
+Run #82 — candidats initiaux = 5 — messages = 28
+Run #83 — candidats initiaux = 4 — messages = 26
+Run #84 — candidats initiaux = 8 — messages = 34
+Run #85 — candidats initiaux = 5 — messages = 28
+Run #86 — candidats initiaux = 5 — messages = 31
+Run #87 — candidats initiaux = 3 — messages = 22
+Run #88 — candidats initiaux = 8 — messages = 30
+Run #89 — candidats initiaux = 7 — messages = 34
+Run #90 — candidats initiaux = 3 — messages = 22
+Run #91 — candidats initiaux = 5 — messages = 27
+Run #92 — candidats initiaux = 7 — messages = 30
+Run #93 — candidats initiaux = 3 — messages = 23
+Run #94 — candidats initiaux = 3 — messages = 33
+Run #95 — candidats initiaux = 5 — messages = 28
+Run #96 — candidats initiaux = 5 — messages = 28
+Run #97 — candidats initiaux = 4 — messages = 24
+Run #98 — candidats initiaux = 6 — messages = 29
+Run #99 — candidats initiaux = 7 — messages = 28
+Run #100 — candidats initiaux = 3 — messages = 24
+=== Statistiques sur 100 exécutions ===
+Moyenne = 28.45
+Minimum = 21
+Maximum = 40
+
+-> En moyenne, plus il y a de candidats au départ, plus le nombre de messages échangés augmente
+On constate donc une tendance générale : chaque candidat supplémentaire génère quelques messages supplémentaires, 
+puisque plusieurs candidatures concurrentes sont lancées et reléguées avant que seule la plus forte ne circule jusqu’au bout.
+
+2 candidats → ~24,8 messages
+
+3 candidats → ~25,1 messages
+
+4 candidats → ~27,5 messages
+
+5 candidats → ~29,3 messages
+
+6 candidats → ~30,3 messages
+
+7 candidats → ~33,2 messages
+
+8 candidats → ~32,0 messages
+
+
+
